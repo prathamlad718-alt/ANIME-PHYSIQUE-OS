@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Anime Physique OS</string>
+    <string name="title_activity_main">Anime Physique OS</string>
+    <string name="package_name">com.awakening.physiqueos</string>
+    <string name="custom_url_scheme">com.awakening.physiqueos</string>
+</resources>

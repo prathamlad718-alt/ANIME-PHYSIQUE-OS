@@ -31,3 +31,13 @@ dist-ssr
 
 # Temporary / test output
 coverage
+
+# Android build outputs & caches
+.gradle/
+build/
+android/app/build/
+android/build/
+android/.gradle/
+*.apk
+*.aab
+
