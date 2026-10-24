@@ -1,0 +1,91 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --bg-void: #07080C;
+    --bg-charcoal: #0F1219;
+    --bg-elevated: #151A24;
+    --border-default: #1E293B;
+    --accent-blue: #00D2FF;
+    --accent-crimson: #EF4444;
+  }
+
+  body {
+    background-color: #07080C;
+    color: #E2E8F0;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+
+  /* Custom tactical scrollbar */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #07080C;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #1E293B;
+    border-radius: 2px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #00D2FF;
+  }
+}
+
+/* Tactical grid overlay subtle pattern */
+.bg-tactical-grid {
+  background-image: 
+    linear-gradient(to right, rgba(30, 41, 59, 0.25) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(30, 41, 59, 0.25) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+/* Sharp corner bracket styles */
+.corner-bracket {
+  position: relative;
+}
+.corner-bracket::before,
+.corner-bracket::after {
+  content: '';
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  pointer-events: none;
+}
+.corner-bracket-tl::before {
+  top: -1px;
+  left: -1px;
+  border-top: 2px solid #00D2FF;
+  border-left: 2px solid #00D2FF;
+}
+.corner-bracket-br::after {
+  bottom: -1px;
+  right: -1px;
+  border-bottom: 2px solid #00D2FF;
+  border-right: 2px solid #00D2FF;
+}
+
+.corner-bracket-crimson-tl::before {
+  top: -1px;
+  left: -1px;
+  border-top: 2px solid #EF4444;
+  border-left: 2px solid #EF4444;
+}
+.corner-bracket-crimson-br::after {
+  bottom: -1px;
+  right: -1px;
+  border-bottom: 2px solid #EF4444;
+  border-right: 2px solid #EF4444;
+}
+
+/* Reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
