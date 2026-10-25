@@ -12,6 +12,7 @@ import { SystemModal } from '../../components/ui/SystemModal';
 import { ConfirmDialog } from '../../components/ui/ConfirmDialog';
 import { EmptyState } from '../../components/ui/EmptyState';
 import { MetricBadge } from '../../components/ui/MetricBadge';
+import { CombatTimer } from '../../components/ui/CombatTimer';
 import {
   Flame,
   Plus,
@@ -307,7 +308,8 @@ export const WorkoutsModule: React.FC<WorkoutsModuleProps> = ({
           </p>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2.5">
+          <CombatTimer />
           <TacticalButton
             variant="secondary"
             size="md"

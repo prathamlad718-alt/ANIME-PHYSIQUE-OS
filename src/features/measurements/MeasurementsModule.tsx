@@ -15,6 +15,7 @@ import { SystemModal } from '../../components/ui/SystemModal';
 import { ConfirmDialog } from '../../components/ui/ConfirmDialog';
 import { EmptyState } from '../../components/ui/EmptyState';
 import { TrendChart, TrendDataPoint } from '../../components/ui/TrendChart';
+import { BodyModel } from '../../components/ui/BodyModel';
 import { MetricBadge } from '../../components/ui/MetricBadge';
 import {
   Activity,
@@ -248,137 +249,21 @@ export const MeasurementsModule: React.FC<MeasurementsModuleProps> = ({
         </TacticalButton>
       </div>
 
-      {/* TOP COMPARATOR & CHARTS GRID */}
-      {measurements.length >= 2 ? (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* 1. Date-to-Date Delta Comparator */}
-          <CornerPanel
-            variant="blue"
-            title="Date-to-Date Delta Comparator"
-            subtitle="Side-by-side perimeter variance"
-            icon={GitCompare}
-          >
-            <div className="space-y-4">
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label className="block text-[10px] font-mono text-ayanokoji-muted uppercase mb-1">
-                    Baseline Entry (Date A)
-                  </label>
-                  <select
-                    value={comparatorDateA}
-                    onChange={(e) => setComparatorDateA(e.target.value)}
-                    className="w-full bg-obsidian-void border border-tactical-border text-xs font-mono text-white p-2 rounded-sm focus:border-solo-blue focus:outline-none"
-                  >
-                    {measurements.map((m) => (
-                      <option key={m.id} value={m.id}>
-                        {m.date} ({m.bodyweightKg ? `${m.bodyweightKg}kg` : 'No Weight'})
-                      </option>
-                    ))}
-                  </select>
-                </div>
+      {/* TOP BIOMECHANICAL & TELEMETRY LAB */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        {/* 1. Anatomical HUD Scanner Wireframe (Cols 1-4) */}
+        <div className="lg:col-span-4 flex flex-col">
+          <BodyModel
+            selectedSite={selectedChartMetric === 'bodyweight' ? 'chest' : selectedChartMetric}
+            onSelectSite={(site) => setSelectedChartMetric(site)}
+            latestEntry={measurements[0]}
+            priorEntry={measurements[1]}
+          />
+        </div>
 
-                <div>
-                  <label className="block text-[10px] font-mono text-ayanokoji-muted uppercase mb-1">
-                    Target Entry (Date B)
-                  </label>
-                  <select
-                    value={comparatorDateB}
-                    onChange={(e) => setComparatorDateB(e.target.value)}
-                    className="w-full bg-obsidian-void border border-tactical-border text-xs font-mono text-white p-2 rounded-sm focus:border-solo-blue focus:outline-none"
-                  >
-                    {measurements.map((m) => (
-                      <option key={m.id} value={m.id}>
-                        {m.date} ({m.bodyweightKg ? `${m.bodyweightKg}kg` : 'No Weight'})
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              </div>
-
-              {entryA && entryB ? (
-                <div className="space-y-3">
-                  <div className="max-h-64 overflow-y-auto space-y-1.5 border border-tactical-border/60 p-2 bg-obsidian-void rounded-sm">
-                    {/* Bodyweight Delta */}
-                    {entryA.bodyweightKg !== undefined && entryB.bodyweightKg !== undefined && (
-                      <div className="flex items-center justify-between p-2 border-b border-tactical-border/40 text-xs font-mono">
-                        <span className="text-white font-semibold">Bodyweight</span>
-                        <div className="flex items-center gap-4">
-                          <span className="text-ayanokoji-muted tabular-nums">
-                            {entryA.bodyweightKg.toFixed(1)}kg → {entryB.bodyweightKg.toFixed(1)}kg
-                          </span>
-                          <span
-                            className={`font-bold tabular-nums ${
-                              entryB.bodyweightKg - entryA.bodyweightKg > 0
-                                ? 'text-status-success'
-                                : entryB.bodyweightKg - entryA.bodyweightKg < 0
-                                ? 'text-combat-crimson'
-                                : 'text-ayanokoji-muted'
-                            }`}
-                          >
-                            {(entryB.bodyweightKg - entryA.bodyweightKg > 0 ? '+' : '') +
-                              (entryB.bodyweightKg - entryA.bodyweightKg).toFixed(1)}
-                            kg
-                          </span>
-                        </div>
-                      </div>
-                    )}
-
-                    {/* Standard sites */}
-                    {Object.entries(STANDARD_METRIC_LABELS).map(([key, label]) => {
-                      const valA = entryA.standardMetrics[key as StandardMetricKey];
-                      const valB = entryB.standardMetrics[key as StandardMetricKey];
-
-                      if (valA === undefined && valB === undefined) return null;
-
-                      const delta =
-                        valA !== undefined && valB !== undefined ? valB - valA : null;
-
-                      return (
-                        <div
-                          key={key}
-                          className="flex items-center justify-between p-1.5 hover:bg-obsidian-elevated/40 text-xs font-mono"
-                        >
-                          <span className="text-ayanokoji-secondary">{label}</span>
-                          <div className="flex items-center gap-4">
-                            <span className="text-ayanokoji-muted tabular-nums text-[11px]">
-                              {valA !== undefined ? `${valA} ${entryA.unit}` : '—'} →{' '}
-                              {valB !== undefined ? `${valB} ${entryB.unit}` : '—'}
-                            </span>
-                            <span
-                              className={`font-bold tabular-nums w-14 text-right ${
-                                delta === null
-                                  ? 'text-ayanokoji-muted'
-                                  : delta > 0
-                                  ? 'text-status-success'
-                                  : delta < 0
-                                  ? 'text-status-warning'
-                                  : 'text-ayanokoji-muted'
-                              }`}
-                            >
-                              {delta !== null
-                                ? (delta > 0 ? `+${delta.toFixed(1)}` : delta.toFixed(1)) +
-                                  ` ${entryB.unit}`
-                                : 'N/A'}
-                            </span>
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </div>
-
-                  {/* Explicit Analytical Disclaimer */}
-                  <div className="flex items-start gap-2 bg-obsidian-elevated/80 border border-tactical-border p-2.5 rounded-sm">
-                    <HelpCircle className="w-4 h-4 text-solo-blue shrink-0 mt-0.5" />
-                    <p className="text-[10px] font-mono text-ayanokoji-secondary leading-relaxed">
-                      Tactical note: Short-term circumference deltas primarily reflect intracellular glycogen volume, hydration status, measurement tape tension, and digestive contents rather than localized tissue hypertrophy or fat loss.
-                    </p>
-                  </div>
-                </div>
-              ) : null}
-            </div>
-          </CornerPanel>
-
-          {/* 2. Interactive Trend Trajectory Chart */}
+        {/* 2. Interactive Trajectory Trend Chart & Comparator (Cols 5-12) */}
+        <div className="lg:col-span-8 space-y-6">
+          {/* Trajectory Trend Chart */}
           <CornerPanel
             variant="blue"
             title="Biometric Trajectory Trend"
@@ -411,11 +296,140 @@ export const MeasurementsModule: React.FC<MeasurementsModuleProps> = ({
                   : measurements[0]?.unit || 'cm'
               }
               color="blue"
-              height={220}
+              height={200}
             />
           </CornerPanel>
+
+          {/* Date-to-Date Delta Comparator */}
+          {measurements.length >= 2 && (
+            <CornerPanel
+              variant="blue"
+              title="Date-to-Date Delta Comparator"
+              subtitle="Side-by-side perimeter variance"
+              icon={GitCompare}
+            >
+              <div className="space-y-4">
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-[10px] font-mono text-ayanokoji-muted uppercase mb-1">
+                      Baseline Entry (Date A)
+                    </label>
+                    <select
+                      value={comparatorDateA}
+                      onChange={(e) => setComparatorDateA(e.target.value)}
+                      className="w-full bg-obsidian-void border border-tactical-border text-xs font-mono text-white p-2 rounded-sm focus:border-solo-blue focus:outline-none"
+                    >
+                      {measurements.map((m) => (
+                        <option key={m.id} value={m.id}>
+                          {m.date} ({m.bodyweightKg ? `${m.bodyweightKg}kg` : 'No Weight'})
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="block text-[10px] font-mono text-ayanokoji-muted uppercase mb-1">
+                      Target Entry (Date B)
+                    </label>
+                    <select
+                      value={comparatorDateB}
+                      onChange={(e) => setComparatorDateB(e.target.value)}
+                      className="w-full bg-obsidian-void border border-tactical-border text-xs font-mono text-white p-2 rounded-sm focus:border-solo-blue focus:outline-none"
+                    >
+                      {measurements.map((m) => (
+                        <option key={m.id} value={m.id}>
+                          {m.date} ({m.bodyweightKg ? `${m.bodyweightKg}kg` : 'No Weight'})
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+
+                {entryA && entryB ? (
+                  <div className="space-y-3">
+                    <div className="max-h-56 overflow-y-auto space-y-1.5 border border-tactical-border/60 p-2 bg-obsidian-void rounded-sm">
+                      {/* Bodyweight Delta */}
+                      {entryA.bodyweightKg !== undefined && entryB.bodyweightKg !== undefined && (
+                        <div className="flex items-center justify-between p-2 border-b border-tactical-border/40 text-xs font-mono">
+                          <span className="text-white font-semibold">Bodyweight</span>
+                          <div className="flex items-center gap-4">
+                            <span className="text-ayanokoji-muted tabular-nums">
+                              {entryA.bodyweightKg.toFixed(1)}kg → {entryB.bodyweightKg.toFixed(1)}kg
+                            </span>
+                            <span
+                              className={`font-bold tabular-nums ${
+                                entryB.bodyweightKg - entryA.bodyweightKg > 0
+                                  ? 'text-status-success'
+                                  : entryB.bodyweightKg - entryA.bodyweightKg < 0
+                                  ? 'text-combat-crimson'
+                                  : 'text-ayanokoji-muted'
+                              }`}
+                            >
+                              {(entryB.bodyweightKg - entryA.bodyweightKg > 0 ? '+' : '') +
+                                (entryB.bodyweightKg - entryA.bodyweightKg).toFixed(1)}
+                              kg
+                            </span>
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Standard sites */}
+                      {Object.entries(STANDARD_METRIC_LABELS).map(([key, label]) => {
+                        const valA = entryA.standardMetrics[key as StandardMetricKey];
+                        const valB = entryB.standardMetrics[key as StandardMetricKey];
+
+                        if (valA === undefined && valB === undefined) return null;
+
+                        const delta =
+                          valA !== undefined && valB !== undefined ? valB - valA : null;
+
+                        return (
+                          <div
+                            key={key}
+                            className="flex items-center justify-between p-1.5 hover:bg-obsidian-elevated/40 text-xs font-mono"
+                          >
+                            <span className="text-ayanokoji-secondary">{label}</span>
+                            <div className="flex items-center gap-4">
+                              <span className="text-ayanokoji-muted tabular-nums text-[11px]">
+                                {valA !== undefined ? `${valA} ${entryA.unit}` : '—'} →{' '}
+                                {valB !== undefined ? `${valB} ${entryB.unit}` : '—'}
+                              </span>
+                              <span
+                                className={`font-bold tabular-nums w-14 text-right ${
+                                  delta === null
+                                    ? 'text-ayanokoji-muted'
+                                    : delta > 0
+                                    ? 'text-status-success'
+                                    : delta < 0
+                                    ? 'text-status-warning'
+                                    : 'text-ayanokoji-muted'
+                                }`}
+                              >
+                                {delta !== null
+                                  ? (delta > 0 ? `+${delta.toFixed(1)}` : delta.toFixed(1)) +
+                                    ` ${entryB.unit}`
+                                  : 'N/A'}
+                              </span>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+
+                    {/* Explicit Analytical Disclaimer */}
+                    <div className="flex items-start gap-2 bg-obsidian-elevated/80 border border-tactical-border p-2.5 rounded-sm">
+                      <HelpCircle className="w-4 h-4 text-solo-blue shrink-0 mt-0.5" />
+                      <p className="text-[10px] font-mono text-ayanokoji-secondary leading-relaxed">
+                        Tactical note: Short-term circumference deltas primarily reflect intracellular glycogen volume, hydration status, measurement tape tension, and digestive contents rather than localized tissue hypertrophy or fat loss.
+                      </p>
+                    </div>
+                  </div>
+                ) : null}
+              </div>
+            </CornerPanel>
+          )}
         </div>
-      ) : null}
+      </div>
 
       {/* HISTORICAL LOG TABLE */}
       <CornerPanel

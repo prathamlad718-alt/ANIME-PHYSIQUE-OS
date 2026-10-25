@@ -22,7 +22,9 @@ export const SystemHeader: React.FC<SystemHeaderProps> = ({
     : 1;
 
   return (
-    <header className="border-b border-tactical-border/80 bg-obsidian-charcoal/95 backdrop-blur-md sticky top-0 z-30 px-4 sm:px-6 py-3">
+    <header className="border-b border-tactical-border/80 bg-obsidian-charcoal/95 backdrop-blur-md sticky top-0 z-30 px-4 sm:px-6 py-3 relative">
+      {/* Specular Top Rim Highlight */}
+      <div className="absolute top-0 inset-x-0 h-[1px] bg-gradient-to-r from-transparent via-solo-blue/30 to-transparent pointer-events-none" />
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row md:items-center justify-between gap-3">
         {/* Left: System Status & Arc */}
         <div className="flex items-center gap-3">

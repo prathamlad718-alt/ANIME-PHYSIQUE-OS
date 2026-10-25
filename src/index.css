@@ -16,6 +16,7 @@
     background-color: #07080C;
     color: #E2E8F0;
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+    overflow-x: hidden;
   }
 
   /* Custom tactical scrollbar */
@@ -35,12 +36,34 @@
   }
 }
 
-/* Tactical grid overlay subtle pattern */
-.bg-tactical-grid {
-  background-image: 
-    linear-gradient(to right, rgba(30, 41, 59, 0.25) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(30, 41, 59, 0.25) 1px, transparent 1px);
-  background-size: 32px 32px;
+/* Atmospheric energy aura emitters */
+.bg-atmospheric-void {
+  background-color: #07080C;
+  background-image:
+    radial-gradient(circle at 85% 10%, rgba(239, 68, 68, 0.08) 0%, transparent 45%),
+    radial-gradient(circle at 15% 90%, rgba(0, 210, 255, 0.08) 0%, transparent 50%),
+    linear-gradient(to right, rgba(30, 41, 59, 0.22) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(30, 41, 59, 0.22) 1px, transparent 1px);
+  background-size: 100% 100%, 100% 100%, 32px 32px, 32px 32px;
+  background-attachment: fixed;
+}
+
+/* Glassmorphism specular highlights */
+.glass-panel {
+  background: rgba(15, 18, 25, 0.82);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+  box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.8);
+}
+
+.glass-panel-elevated {
+  background: rgba(21, 26, 36, 0.90);
+  backdrop-filter: blur(28px);
+  -webkit-backdrop-filter: blur(28px);
+  border-top: 1px solid rgba(255, 255, 255, 0.16);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
 }
 
 /* Sharp corner bracket styles */
@@ -51,9 +74,10 @@
 .corner-bracket::after {
   content: '';
   position: absolute;
-  width: 6px;
-  height: 6px;
+  width: 7px;
+  height: 7px;
   pointer-events: none;
+  z-index: 10;
 }
 .corner-bracket-tl::before {
   top: -1px;
@@ -79,6 +103,45 @@
   right: -1px;
   border-bottom: 2px solid #EF4444;
   border-right: 2px solid #EF4444;
+}
+
+/* Pulse aura animations */
+@keyframes aura-pulse-blue {
+  0%, 100% {
+    box-shadow: 0 0 15px rgba(0, 210, 255, 0.12), inset 0 0 15px rgba(0, 210, 255, 0.03);
+  }
+  50% {
+    box-shadow: 0 0 25px rgba(0, 210, 255, 0.28), inset 0 0 20px rgba(0, 210, 255, 0.08);
+  }
+}
+
+@keyframes aura-pulse-crimson {
+  0%, 100% {
+    box-shadow: 0 0 15px rgba(239, 68, 68, 0.14), inset 0 0 15px rgba(239, 68, 68, 0.03);
+  }
+  50% {
+    box-shadow: 0 0 28px rgba(239, 68, 68, 0.32), inset 0 0 22px rgba(239, 68, 68, 0.09);
+  }
+}
+
+.animate-aura-blue {
+  animation: aura-pulse-blue 4s ease-in-out infinite;
+}
+
+.animate-aura-crimson {
+  animation: aura-pulse-crimson 3.5s ease-in-out infinite;
+}
+
+/* Scanline overlay for tactical HUD panels */
+.scanline-grid {
+  background: linear-gradient(
+    to bottom,
+    rgba(255,255,255,0),
+    rgba(255,255,255,0) 50%,
+    rgba(0, 0, 0, 0.25) 50%,
+    rgba(0, 0, 0, 0.25)
+  );
+  background-size: 100% 4px;
 }
 
 /* Reduced motion preference */

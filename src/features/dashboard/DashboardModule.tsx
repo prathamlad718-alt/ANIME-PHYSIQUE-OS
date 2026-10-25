@@ -105,22 +105,32 @@ export const DashboardModule: React.FC<DashboardModuleProps> = ({
   return (
     <div className="space-y-6">
       {/* 1. TOP AWAKENING HERO BANNER */}
-      <div className="relative border border-solo-blue/40 bg-gradient-to-r from-obsidian-charcoal via-obsidian-elevated to-obsidian-charcoal p-5 sm:p-6 rounded-sm shadow-hud-blue overflow-hidden">
-        <div className="absolute top-0 right-0 w-64 h-64 bg-solo-blue/5 rounded-full blur-3xl pointer-events-none" />
+      <div className="relative border border-solo-blue/50 bg-gradient-to-r from-obsidian-charcoal via-obsidian-elevated to-obsidian-charcoal p-5 sm:p-6 rounded-sm shadow-hud-blue overflow-hidden animate-aura-blue">
+        {/* Specular Edge Top Line */}
+        <div className="absolute top-0 inset-x-0 h-[1px] bg-gradient-to-r from-transparent via-solo-blue/40 to-transparent pointer-events-none" />
+
+        {/* Ambient Radial Aura Blobs */}
+        <div className="absolute -top-12 -right-12 w-72 h-72 bg-solo-blue/15 rounded-full blur-3xl pointer-events-none animate-pulse" />
+        <div className="absolute -bottom-12 -left-12 w-72 h-72 bg-combat-crimson/10 rounded-full blur-3xl pointer-events-none" />
+
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-5 relative z-10">
-          <div className="space-y-1.5">
+          <div className="space-y-2">
             <div className="flex items-center gap-2">
-              <span className="text-[10px] font-mono tracking-widest text-solo-blue uppercase px-2 py-0.5 bg-solo-blue/10 border border-solo-blue/30 rounded-sm">
-                STATUS ACTIVE
+              <span className="text-[10px] font-mono tracking-widest text-solo-blue uppercase px-2.5 py-0.5 bg-solo-blue/15 border border-solo-blue/40 rounded-sm font-bold shadow-hud-blue flex items-center gap-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-solo-blue animate-ping" />
+                SYSTEM ONLINE // HUNTER LINK
               </span>
               <span className="text-xs font-mono text-ayanokoji-muted">
-                CODENAME: {settings?.currentArcName || 'FOUNDATION ARC'}
+                CODENAME: <span className="text-white font-bold">{settings?.currentArcName || 'FOUNDATION ARC'}</span>
               </span>
             </div>
-            <h1 className="font-display font-black text-xl sm:text-2xl text-white tracking-wide uppercase">
-              HUNTER STATUS // LEVEL {rankInfo.level} ({rankInfo.rank}-RANK)
+            <h1 className="font-display font-black text-xl sm:text-3xl text-white tracking-wide uppercase flex items-center gap-3">
+              <span>HUNTER STATUS // LEVEL {rankInfo.level}</span>
+              <span className="px-2 py-0.5 text-sm font-mono font-bold bg-combat-crimson/20 border border-combat-crimson text-combat-crimson rounded-sm shadow-hud-crimson">
+                {rankInfo.rank}-RANK
+              </span>
             </h1>
-            <p className="text-xs text-ayanokoji-secondary max-w-xl font-mono">
+            <p className="text-xs text-ayanokoji-secondary max-w-xl font-mono leading-relaxed">
               Day <span className="text-white font-bold">{dayCount}</span> of continuous physical transformation. Total cumulative activity standing at{' '}
               <span className="text-solo-blue font-bold tabular-nums">{rankInfo.currentXP} XP</span>. Next rank tier unlocks at{' '}
               <span className="text-white font-bold tabular-nums">{rankInfo.nextRankXP} XP</span>.
@@ -157,20 +167,24 @@ export const DashboardModule: React.FC<DashboardModuleProps> = ({
         </div>
 
         {/* System XP Progression Meter */}
-        <div className="mt-5 pt-4 border-t border-tactical-border/60">
+        <div className="mt-5 pt-4 border-t border-tactical-border/60 relative z-10">
           <div className="flex justify-between items-center text-xs font-mono mb-1.5">
-            <span className="text-ayanokoji-secondary font-semibold">
+            <span className="text-ayanokoji-secondary font-semibold flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-solo-blue animate-pulse" />
               ARC PROGRESSION TOWARD {rankInfo.rank === 'MONARCH' ? 'TRANSCENDENCE' : 'NEXT RANK'}
             </span>
             <span className="text-solo-blue font-bold tabular-nums">
               {rankInfo.progressPercent}% COMPLETE
             </span>
           </div>
-          <div className="w-full h-2.5 bg-obsidian-void border border-tactical-border rounded-sm overflow-hidden">
+          <div className="w-full h-2.5 bg-obsidian-void border border-tactical-border rounded-sm overflow-hidden relative">
             <div
-              className="h-full bg-gradient-to-r from-solo-blue to-cyan-400 transition-all duration-500"
+              className="h-full bg-gradient-to-r from-solo-blue via-cyan-400 to-solo-blue transition-all duration-500 relative"
               style={{ width: `${Math.max(2, rankInfo.progressPercent)}%` }}
-            />
+            >
+              {/* Leading edge neon spark */}
+              <div className="absolute right-0 top-0 bottom-0 w-2 bg-white shadow-[0_0_8px_#ffffff]" />
+            </div>
           </div>
         </div>
       </div>

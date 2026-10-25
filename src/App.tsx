@@ -190,7 +190,7 @@ export const App: React.FC = () => {
   }
 
   return (
-    <div className={`min-h-screen bg-obsidian-void text-ayanokoji-slate bg-tactical-grid flex flex-col ${settings?.reducedMotion ? 'motion-reduce' : ''}`}>
+    <div className={`min-h-screen bg-atmospheric-void text-ayanokoji-slate flex flex-col ${settings?.reducedMotion ? 'motion-reduce' : ''}`}>
       {/* Top Tactical Status Header */}
       <SystemHeader
         settings={settings}
